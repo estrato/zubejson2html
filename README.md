@@ -1,7 +1,7 @@
 # zubejson2html
-Users of Zube.io currently have no way of exporting issues in a format suitable for printing. 
-However, it allows users to export issues to a JSON file. 
-This script converts Zube's JSON file to a HTML file designed to be printed from a browser.
+Users of Zube.io currently have no way of exporting issues in a format suitable for printing as cards for use on a physical Scrum or Kanban board. 
+However, Zube allows users to export lists of issues as a JSON file. 
+This script converts Zube's JSON file to a HTML file with a visual style and layout designed for print.
 
 The bash script and the HTML/CSS template were developed and tested in MacOS Mojave with Chrome 71.
 
