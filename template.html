@@ -1,0 +1,41 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="grid.css" type="text/css" />
+<title>Cards</title>
+</head>
+<body>
+<script type="text/javascript">
+
+  var label = {'<>':'span', 'class':'label', 'id':'${id}', 'style':'border-bottom-color:#${color};', 'html':'${name}'};
+
+  var card = {
+    '<>':'div', 'class':'card', 'id':'${id}', 'html':[
+    {'<>':'div', 'class':'card-content', 'html':[
+      {'<>':'div', 'class':'header', 'html':[
+        {'<>':'span', 'class':'number', 'html':'${number}'},
+        {'<>':'span', 'class':'points', 'html':'${points}'},
+        {'<>':'span', 'class':'title', 'html':'${title}'},
+      ]},
+      {'<>':'div', 'class':'main', 'html':'${body}'},
+      {'<>':'div', 'class':'labels', 'html':function(){
+        return json2html.transform(this.labels, label);
+      }},
+      {'<>':'div', 'class':'footer', 'html':[
+        {'<>':'span', 'class':'priority', 'html':function(){ return this.priority || 'No priority';}},
+        {'<>':'span', 'class':'project', 'html':'${project_name}'},
+        {'<>':'span', 'class':'sprint', 'html':'${sprint.title}'},
+        {'<>':'span', 'class':'creator', 'html':'${creator.name}'}
+      ]}
+    ]}
+  ]};
+
+  var data = ${__JSON_DATA__};
+
+  document.write( json2html.transform(data, card) );
+
+</script>
+</body>
+</html>
