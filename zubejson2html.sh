@@ -22,4 +22,5 @@ TEMPLATE_FILE="template.html"
 DATE=`date "+%Y%m%d%H%M%S"`
 HTML_FILE="cards-${DATE}.html"
 
-__JSON_DATA__=`cat $JSON_DATA_FILE | sed -e 's/\\\\r\\\\n/<br>/g'` expandVarsStrict <<< `cat $TEMPLATE_FILE` > $HTML_FILE && echo "Wrote $HTML_FILE"
+# __JSON_DATA__=`cat $JSON_DATA_FILE | sed -e 's/\\\\r\\\\n/<br>/g'` expandVarsStrict <<< `cat $TEMPLATE_FILE` > $HTML_FILE && echo "Wrote $HTML_FILE"
+__JSON_DATA__=`cat "$JSON_DATA_FILE"` expandVarsStrict < $TEMPLATE_FILE > $HTML_FILE && echo "Wrote $HTML_FILE"

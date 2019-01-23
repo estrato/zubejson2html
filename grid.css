@@ -2,10 +2,11 @@ html {
   box-sizing: border-box;
   margin: 0; padding: 0;
   height: 100%;
-  color: black;
+  color: #333333;
   font-family: "Helvetica Neue", Helvetica, "Franklin Gothic Medium", "Franklin Gothic", "ITC Franklin Gothic", Arial, sans-serif;
   font-size: 12pt;
-  font-weight: 400;  
+  font-weight: 300;
+  line-height: normal;
 }
 
 *, *:before, *:after {
@@ -34,86 +35,119 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 2px solid black;
+  border: 1px solid black;
   display: inline-grid;
-  grid-template-rows: 2em 1fr 1.5em 1em;
+  grid-template-rows: auto 1fr auto auto;
   grid-auto-flow: dense;
   grid-gap: 0;
-  align-items: stretch;
+  align-items: start;
 }
 
 .header {
-  max-height: 100%;
+  /* max-height: 100%; */
   padding: 0 0.2em;
   grid-row-start: 1;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid lightgray;
   display: inline-grid;
   grid-template-columns: auto 1fr auto;
   grid-gap: 0.35em;
   grid-auto-flow: dense;
-  font-weight: bold;
   align-items: center;
+  justify-items: start;
+  overflow: hidden;
+  font-size: 14pt;
+}
+.header > span {
+  max-width: 100%;
 }
 .number {
   grid-column-start: 1;
-  justify-self: start;
-  color: red;
+  place-self: start;
+  font-weight: 300;
+  color: #676767;
 }
 .number::before {
   content: "#";
 }
 .title {
   grid-column-start: 2;
-  justify-self: start;
-  max-width: 100%;
-  max-height: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: black;
+  place-self: center start;
+  font-weight: 400;
+  color: #555555;
 }
 .points {
   grid-column-start: 3;
-  justify-self: end;
-  color: blue;
+  position: relative;
+  place-self: start;
+  font-weight: 300;
 }
-.points::after {
-  content: "p";
+.points::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: -1px;
+  right: -0.2em;
+  left:-0.3em;
+  border-color: lightgray;
+  border-style: solid;
+  border-width: 0 0 1px 1px;
 }
 
 .main {
   grid-row-start: 2;
-  padding: 0.5em;
   max-width: 100%;
   max-height: 100%;
+  padding: .25em .75em 0;
   overflow: hidden;
-  font-size: 14pt;
+  font-size: 12pt;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.avatar {
+  grid-row-start: 3;
+  grid-column-start: 1;
+  place-self: center end;
+  /*
+  position: absolute;
+  left: 0.25em;
+  bottom: -.5em;
+  */
+  max-width: 1em;
+  max-height: 1em;
+  padding: 0 0.2em 0.2em 0;
 }
 
 .labels {
   grid-row-start: 3;
-  place-self: stretch end;
+  grid-column-start: 1;
+  place-self: end start;
   max-height: 100%;
+  max-width: 100%;
+  color: gray;
+  font-size: 7pt;
+  font-weight: 300;
+  padding-bottom: 1px;
 }
 .label {
   display: inline-block;
   margin: 0 0.25em;
   border-bottom-width: 0.25em;
   border-bottom-style: solid;
-  color: gray;
-  font-weight: 300;
 }
 
 .footer {
   grid-row-start: 4;
   place-self: stretch;
   max-height: 100%;
+  overflow: hidden;
   padding: 0 0.25em;
-  border-top: 1px solid black;
+  border-top: 1px solid lightgray;
   display: inline-grid;
   grid-gap: 0.25em;
   grid-auto-flow: dense;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: auto auto auto auto;
+  grid-auto-rows: auto;
   align-items: center;
   justify-items: start;
   font-size: 8pt;
@@ -121,15 +155,16 @@ body {
 }
 .footer > span {
   max-width: 100%;
+  overflow: hidden;
 }
 .project {
-  grid-column-start: 1;
+  grid-column-start: 3;
 }
 .sprint {
   grid-column-start: 2;
 }
 .priority {
-  grid-column-start: 3;
+  grid-column-start: 1;
 }
 .creator {
   grid-column-start: 4;

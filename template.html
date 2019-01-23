@@ -2,12 +2,16 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css" type="text/css" />
 <link rel="stylesheet" href="grid.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js" type="text/javascript"></script>
 <title>Cards</title>
 </head>
 <body>
 <script type="text/javascript">
+
+  var md = window.markdownit({'breaks':true});
 
   var label = {'<>':'span', 'class':'label', 'id':'${id}', 'style':'border-bottom-color:#${color};', 'html':'${name}'};
 
@@ -19,12 +23,22 @@
         {'<>':'span', 'class':'points', 'html':'${points}'},
         {'<>':'span', 'class':'title', 'html':'${title}'},
       ]},
-      {'<>':'div', 'class':'main', 'html':'${body}'},
+      {'<>':'div', 'class':'main markdown-body', 'html':function(){
+        return md.render(this.body);
+      }},
+      {'<>':'img', 'class':'avatar', 'src':function(){
+        if (this.assignees && this.assignees.length > 0)
+          return 'https://zube.io/' + this.assignees[0].avatar_path;
+        return '';
+      }},
       {'<>':'div', 'class':'labels', 'html':function(){
         return json2html.transform(this.labels, label);
       }},
       {'<>':'div', 'class':'footer', 'html':[
-        {'<>':'span', 'class':'priority', 'html':function(){ return this.priority || 'No priority';}},
+        {'<>':'span', 'class':'priority', 'html':function(){
+          var p = [ 'No priority', 'Blocker', 'Critical', 'Major', 'Minor', 'Trivial' ];
+          return p[Math.min(this.priority || 0, p.length-1)];
+        }},
         {'<>':'span', 'class':'project', 'html':'${project_name}'},
         {'<>':'span', 'class':'sprint', 'html':'${sprint.title}'},
         {'<>':'span', 'class':'creator', 'html':'${creator.name}'}
