@@ -166,6 +166,24 @@ body {
 .priority {
   grid-column-start: 1;
 }
+.priority.priority_::after {
+  content: "No priority";
+}
+.priority.priority_1::after {
+  content: "P1";
+}
+.priority.priority_2::after {
+  content: "P2";
+}
+.priority.priority_3::after {
+  content: "P3";
+}
+.priority.priority_4::after {
+  content: "P4";
+}
+.priority.priority_5::after {
+  content: "P5";
+}
 .creator {
   grid-column-start: 4;
   justify-self: end;

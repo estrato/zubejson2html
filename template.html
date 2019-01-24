@@ -35,10 +35,7 @@
         return json2html.transform(this.labels, label);
       }},
       {'<>':'div', 'class':'footer', 'html':[
-        {'<>':'span', 'class':'priority', 'html':function(){
-          var p = [ 'No priority', 'Blocker', 'Critical', 'Major', 'Minor', 'Trivial' ];
-          return p[Math.min(this.priority || 0, p.length-1)];
-        }},
+        {'<>':'span', 'class':'priority priority_${priority}', 'html':''},
         {'<>':'span', 'class':'project', 'html':'${project_name}'},
         {'<>':'span', 'class':'sprint', 'html':'${sprint.title}'},
         {'<>':'span', 'class':'creator', 'html':'${creator.name}'}
@@ -48,7 +45,8 @@
 
   var data = ${__JSON_DATA__};
 
-  document.write( json2html.transform(data, card) );
+  var frag = document.createRange().createContextualFragment( json2html.transform(data, card) );
+  document.body.appendChild(frag);
 
 </script>
 </body>
