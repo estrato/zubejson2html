@@ -1,0 +1,124 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css" type="text/css" />
+<link rel="stylesheet" href="grid.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js" type="text/javascript"></script>
+<title>Cards</title>
+</head>
+<body>
+
+  <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+    <fieldset>
+      <h2>Json File</h2>
+       <input type='file' id='fileinput'>
+       <input type='button' id='btnLoad' value='Import' onclick='loadFile();'>
+    </fieldset>
+  </form>
+
+  <script type="text/javascript">
+
+    function convertJson(json) {
+      var md = window.markdownit({'breaks':true});
+      var label = {
+        '<>':'span', 'class':'label', 'id':'${id}', 'style':'border-bottom-color:#${color};', 'html':'${name}'
+      };
+      var card = {
+        '<>':'div', 'class':'card', 'id':'${id}', 'html':[
+        {'<>':'div', 'class':'card-content', 'html':[
+          {'<>':'div', 'class':'header', 'html':[
+            {'<>':'span', 'class':'number', 'html':'${number}'},
+            {'<>':'span', 'class':'points', 'html':'${points}'},
+            {'<>':'span', 'class':'title', 'html':'${title}'},
+          ]},
+          {'<>':'div', 'class':'main markdown-body', 'html':function(){
+            return md.render(this.body);
+          }},
+          {'<>':'img', 'class':'avatar', 'src':function(){
+            if (this.assignees && this.assignees.length > 0)
+              return 'https://zube.io/' + this.assignees[0].avatar_path;
+            return '';
+          }},
+          {'<>':'div', 'class':'labels', 'html':function(){
+            return json2html.transform(this.labels, label);
+          }},
+          {'<>':'div', 'class':'footer', 'html':[
+            {'<>':'span', 'class':'priority priority_${priority}', 'html':''},
+            {'<>':'span', 'class':'project', 'html':'${project_name}'},
+            {'<>':'span', 'class':'sprint', 'html':'${sprint.title}'},
+            {'<>':'span', 'class':'creator', 'html':'${creator.name}'}
+          ]}
+        ]}
+      ]};
+      return json2html.transform(json, card);
+    }
+
+    function loadFile() {
+      var input, file, fr;
+
+      if (typeof window.FileReader !== 'function') {
+        alert("The file API isn't supported on this browser yet.");
+        return;
+      }
+
+      input = document.getElementById('fileinput');
+      if (!input) {
+        alert("Um, couldn't find the fileinput element.");
+      }
+      else if (!input.files) {
+        alert("This browser doesn't seem to support the `files` property of file inputs.");
+      }
+      else if (!input.files[0]) {
+        alert("Please select a file before clicking 'Load'");
+      }
+      else {
+        file = input.files[0];
+        fr = new FileReader();
+        fr.onload = receivedText;
+        fr.readAsText(file);
+      }
+
+      function createFragment(html) {
+        return document.createRange().createContextualFragment( html );
+      }
+
+      function copyParentStylesToIframe(iframe) {
+        var linkrels = window.top.document.getElementsByTagName('link');
+        var head = iframe.contentWindow.document.getElementsByTagName('head').item(0);
+        for (var i = 0, max = linkrels.length; i < max; i++) {
+          if (linkrels[i].rel && linkrels[i].rel == 'stylesheet') {
+            var thestyle = document.createElement('link');
+            var attrib = linkrels[i].attributes;
+            for (var j = 0, attribmax = attrib.length; j < attribmax; j++) {
+              thestyle.setAttribute(attrib[j].nodeName, attrib[j].nodeValue);
+            }
+            head.appendChild(thestyle);
+          }
+        }
+      }
+
+      function receivedText(e) {
+        let lines = e.target.result;
+        var html = convertJson(JSON.parse(lines));
+        var htmlFrag = createFragment( html );
+        var iframe = document.createElement('iframe');
+        iframe.onload = function() {
+          copyParentStylesToIframe(iframe);
+          iframe.contentWindow.document.body.appendChild(htmlFrag);
+          iframe.contentWindow.setTimeout(
+            function(){
+              iframe.contentWindow.focus();
+              iframe.contentWindow.print();
+            }, 1
+          );
+        };
+        document.body.appendChild(iframe);
+      }
+    }
+  </script>
+
+</script>
+</body>
+</html>
